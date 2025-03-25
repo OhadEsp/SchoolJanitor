@@ -8,9 +8,13 @@
     </Window.DataContext>
     <Grid>
         <StackPanel Margin="10">
+            <TextBlock Text="Enter total number of bags:"/>
+            <TextBox Text="{Binding TotalBags, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+            <TextBlock Text="Enter bag number:"/>
+            <TextBox Text="{Binding CurrentBagNumber}" IsReadOnly="True" Width="50"/>
             <TextBlock Text="Enter bag weight (1.01-3.0 kg):"/>
             <TextBox Text="{Binding BagWeight, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
-            <Button Content="Add a bag" Command="{Binding AddBagCommand}"/>
+            <Button Content="Add bag" Command="{Binding AddBagCommand}"/>
             <ListBox ItemsSource="{Binding Bags}" Height="100"/>
             <Button Content="Calculate trips" Command="{Binding CalculateTripsCommand}"/>
             <Label Content="{Binding TripCount}" FontWeight="Bold"/>

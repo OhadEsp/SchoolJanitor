@@ -10,13 +10,17 @@ namespace SchoolJanitor
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<double> _bags;
+        private ObservableCollection<(int, double)> _bags;
         private ObservableCollection<string> _trips;
+        private int _totalBags;
+        private int _currentBagNumber;
         private string _bagWeight;
         private string _tripCount;
 
-        public ObservableCollection<double> Bags { get => _bags; set { _bags = value; OnPropertyChanged(nameof(Bags)); } }
+        public ObservableCollection<(int, double)> Bags { get => _bags; set { _bags = value; OnPropertyChanged(nameof(Bags)); } }
         public ObservableCollection<string> Trips { get => _trips; set { _trips = value; OnPropertyChanged(nameof(Trips)); } }
+        public int TotalBags { get => _totalBags; set { _totalBags = value; OnPropertyChanged(nameof(TotalBags)); } }
+        public int CurrentBagNumber { get => _currentBagNumber; set { _currentBagNumber = value; OnPropertyChanged(nameof(CurrentBagNumber)); } }
         public string BagWeight { get => _bagWeight; set { _bagWeight = value; OnPropertyChanged(nameof(BagWeight)); } }
         public string TripCount { get => _tripCount; set { _tripCount = value; OnPropertyChanged(nameof(TripCount)); } }
 
@@ -25,24 +29,26 @@ namespace SchoolJanitor
 
         public MainViewModel()
         {
-            Bags = new ObservableCollection<double>();
+            Bags = new ObservableCollection<(int, double)>();
             Trips = new ObservableCollection<string>();
             AddBagCommand = new RelayCommand(AddBag);
             CalculateTripsCommand = new RelayCommand(CalculateTrips);
+            CurrentBagNumber = 1;
         }
 
         private void AddBag()
         {
-            if (double.TryParse(BagWeight, out double weight) && weight >= 1.01 && weight <= 3.0)
+            if (double.TryParse(BagWeight, out double weight) && weight >= 1.01 && weight <= 3.0 && CurrentBagNumber <= TotalBags)
             {
-                Bags.Add(weight);
+                Bags.Add((CurrentBagNumber, weight));
                 BagWeight = string.Empty;
+                CurrentBagNumber++;
             }
         }
 
         private void CalculateTrips()
         {
-            var result = CalculateMinTrips(Bags.ToList());
+            var result = CalculateMinTrips(Bags.Select(b => b.Item2).ToList());
             TripCount = $"Minimum number of trips: {result.Item1}";
             Trips.Clear();
             int tripNumber = 1;
