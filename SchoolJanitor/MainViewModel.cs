@@ -49,16 +49,16 @@ namespace SchoolJanitor
         private void CalculateTrips()
         {
             var result = CalculateMinTrips(Bags.Select(b => b.Item2).ToList());
-            TripCount = $"Minimum number of trips: {result.Item1}";
+            TripCount = $"Minimum number of trips: {result.TripCount}";
             Trips.Clear();
             int tripNumber = 1;
-            foreach (var trip in result.Item2)
+            foreach (var trip in result.Trips)
             {
                 Trips.Add($"Trip {tripNumber++}: {string.Join(", ", trip)} kg");
             }
         }
 
-        private (int, List<List<double>>) CalculateMinTrips(List<double> bagWeights)
+        private MinTripsCalcRes CalculateMinTrips(List<double> bagWeights)
         {
             List<List<double>> trips = new List<List<double>>();
             bagWeights = bagWeights.OrderByDescending(x => x).ToList();
@@ -75,7 +75,13 @@ namespace SchoolJanitor
                 }
                 trips.Add(trip);
             }
-            return (trips.Count, trips);
+            return new MinTripsCalcRes { TripCount = trips.Count, Trips = trips };
+        }
+
+        public class MinTripsCalcRes
+        {
+            public int TripCount { get; set; }
+            public List<List<double>> Trips { get; set; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
