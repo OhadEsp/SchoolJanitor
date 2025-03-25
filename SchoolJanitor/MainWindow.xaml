@@ -1,0 +1,20 @@
+﻿<Window x:Class="SchoolJanitor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:SchoolJanitor"
+        Title="Managing Garbage Collection" Height="400" Width="500">
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <StackPanel Margin="10">
+            <TextBlock Text="Enter bag weight (1.01-3.0 kg):"/>
+            <TextBox Text="{Binding BagWeight, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+            <Button Content="Add a bag" Command="{Binding AddBagCommand}"/>
+            <ListBox ItemsSource="{Binding Bags}" Height="100"/>
+            <Button Content="Calculate trips" Command="{Binding CalculateTripsCommand}"/>
+            <Label Content="{Binding TripCount}" FontWeight="Bold"/>
+            <ListBox ItemsSource="{Binding Trips}" Height="100"/>
+        </StackPanel>
+    </Grid>
+</Window>
